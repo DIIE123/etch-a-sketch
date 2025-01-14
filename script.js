@@ -105,10 +105,14 @@ tools.addEventListener("click", (event) => {
             createGrid(canvasDimensions);
             break;
         case "size":
-            canvasDimensions = prompt("Enter the new size (max 100):");
-            while (isNaN(canvasDimensions) || canvasDimensions < 1 || canvasDimensions > 100) {
-                canvasDimensions = prompt("Invalid! Enter the new size (max 100):");
+            let input = prompt("Enter the new size (max 100):");
+            while (isNaN(input) || input < 1 || input > 100) {
+                if (input === null) break;
+                input = prompt("Invalid! Enter the new size (max 100):");
             }
+
+            if (input === null) break;
+            canvasDimensions = input;
             createGrid(canvasDimensions);
             break;
     }
