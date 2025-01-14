@@ -4,23 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%221em%22 font-size=%2280%22>🖌️</text></svg>">
     <script src="script.js" defer></script>
     <title>Etch-A-Sketch</title>
 </head>
 <body>
-    
+    <h1>Etch-A-Sketch</h1>
 
     <div id="content">
-        <div id="display">
-            <h1>Etch-A-Sketch</h1>
-
-            <button id="normal">Normal Mode</button>
-            <button id="rainbow">Rainbow Mode</button>
-            <button id="eraser">Eraser Mode</button>
-            <button id="clear">Clear Canvas</button>
+        <div id="tools">
+            <div id="normal-container">
+                <input type="color" id="color-picker">
+                <button id="normal" class="selected">✏️ Normal Mode</button>
+            </div>
+            <div>
+                <button id="rainbow">🌈 Rainbow Mode</button>
+            </div>
+            <div>
+                <button id="eraser">🧼 Eraser Mode</button>
+            </div>
+            <div>
+                <button id="clear">Clear Canvas</button>
+            </div>
+            <div>
+                <button id="size">Change Grid Size</button>
+            </div>
         </div>
 
         <div id="container"></div>
     </div>
+
+    <div id="footer">Made by <a href="https://github.com/DIIE123">DIIE123</a></div>
 </body>
 </html>

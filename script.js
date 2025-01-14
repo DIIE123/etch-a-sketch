@@ -1,11 +1,28 @@
-const CONTAINER_DIMENSIONS = 640;
+const CONTAINER_DIMENSIONS = 480;
 
-let brushColor = "black";
+let canvasDimensions = 16;
+let brushColor = "rgb(0, 0, 0)";
+let rainbow = false;
+let holding = false;
+let currentSelected = document.querySelector("#normal");
 
+const colorPicker = document.querySelector("#color-picker");
+const tools = document.querySelector("#tools");
 const container = document.querySelector("#container");
 container.style.width = container.style.height = `${CONTAINER_DIMENSIONS}px`;
 
-createGrid(16);
+startSite();
+ 
+function startSite () {
+    createGrid(canvasDimensions);
+
+    const delay = 0.2;
+    const toolList = Array.from(tools.children);
+    for (let i = 0; i < toolList.length; i++) {
+        toolList[i].classList.add("fadein");
+        toolList[i].style.animationDelay = `${delay * (i + 2)}s`;
+    }
+}
 
 function createGrid(dimensions) {
     container.textContent = "";
@@ -18,7 +35,7 @@ function createGrid(dimensions) {
             const pixel = document.createElement("div");
             pixel.classList.add("pixel");
             pixel.style.width = pixel.style.height = `${CONTAINER_DIMENSIONS / dimensions}px`;
-            pixel.style.backgroundColor = "white";
+            pixel.style.backgroundColor = "rgb(255, 255, 255)";
 
             row.appendChild(pixel);
         }
@@ -26,10 +43,74 @@ function createGrid(dimensions) {
     }
 }
 
-container.addEventListener("mouseover", (event) => {
-    const target = event.target;
+function draw(target) {
+    if (target.classList.contains("pixel") && holding) {
+        if (rainbow) {
+            target.style.backgroundColor = randomRGB();
+        }
+        else {
+            target.style.backgroundColor = brushColor;
+        }
+    }
+}
 
-    if (target.classList.contains("pixel")) {
-        target.style.backgroundColor = brushColor;
+function select(target) {
+    rainbow = false;
+    currentSelected.classList.remove("selected");
+    currentSelected = target;
+    currentSelected.classList.add("selected");
+}
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function randomRGB() {
+    return `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+}
+
+container.addEventListener("mousedown", (event) => {
+    holding = true;
+    draw(event.target);
+});
+
+container.addEventListener("mouseup", () => {
+    holding = false;
+});
+
+container.addEventListener("mouseover", (event) => {
+    draw(event.target);
+});
+
+colorPicker.addEventListener("input", () => {
+    brushColor = colorPicker.value;
+    colorPicker.style.backgroundColor = colorPicker.value;
+});
+
+tools.addEventListener("click", (event) => {
+    switch(event.target.id) {
+        case "normal":
+            select(event.target);
+            brushColor = colorPicker.value;
+            break;
+        case "rainbow":
+            select(event.target);
+            rainbow = true;
+            break;
+        case "eraser":
+            select(event.target);
+            brushColor = "rgb(255, 255, 255)";
+            break;
+        case "clear":
+            createGrid(canvasDimensions);
+            break;
+        case "size":
+            canvasDimensions = prompt("Enter the new size (max 100):");
+            while (isNaN(canvasDimensions) || canvasDimensions < 1 || canvasDimensions > 100) {
+                canvasDimensions = prompt("Invalid! Enter the new size (max 100):");
+            }
+            createGrid(canvasDimensions);
+            break;
     }
 });
+
